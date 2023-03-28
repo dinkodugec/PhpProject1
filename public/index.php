@@ -1,6 +1,6 @@
 <?php
 
-
+use app\Enums\Status;
 use app\Models\Flight;
 
 
@@ -18,8 +18,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 require_once '../vendor/autoload.php';
 
-$id = new \Ramsey\Uuid\UuidFactory();
-echo $id->uuid4();
- 
-$flight = new Flight;
-echo $flight->hello();
+$flight = new Flight();
+$flight->setStatus(Status::APROVED);
+var_dump($flight);
