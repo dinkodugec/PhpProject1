@@ -5,6 +5,7 @@ use app\Models\FancyGiftPackage;
 use app\Models\Flight;
 use app\Models\Package;
 use app\Models\PaperPackage;
+use app\Models\CollectPackageService;
 use app\Models\PaymentGatway\Paddle\Transaction;
 
 
@@ -42,3 +43,5 @@ $transanction = new Transaction(25);
 
  $gift = new FancyGiftPackage($packPap );
  echo $gift->deliveryPack(); 
+
+
