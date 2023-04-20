@@ -3,7 +3,7 @@
 namespace app\Models;
 
 
-/* you can not have properties in interface but can have constants
+/* you can not have properties in interface but can have constants and can not be overritten
  *//* interface CollectPackage extends NewCollect, SomeOtherCollect Interface - all interfaces must e implemented in child class
  */interface CollectPackage
 {
