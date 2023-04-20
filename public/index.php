@@ -10,6 +10,7 @@ use app\Models\PaymentGatway\Paddle\Transaction;
 use app\Models\OrderInterface;
 use app\Models\WebOrder;
 use app\Models\Order;
+use app\Models\ShopOrder;
 
 
 /* spl_autoload_register(function($class){
@@ -47,6 +48,6 @@ $transanction = new Transaction(25);
  $gift = new FancyGiftPackage($packPap );
  echo $gift->deliveryPack(); 
 
- $or = new Order(new WebOrder());
+ $or = new Order(new ShopOrder());
  echo $or->order->getOrder();
 
