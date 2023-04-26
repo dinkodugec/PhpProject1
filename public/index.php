@@ -51,3 +51,29 @@ $transanction = new Transaction(25);
  $or = new Order(new ShopOrder());
  echo $or->order->getOrder();
 
+/*  LATE STATIC BINDING  */
+   /*  use runtime information to determine how to call method, or acces property or cons
+ */
+ class ClassA
+{
+   protected static string $name = 'A';
+
+   public static function getName(): string
+   {
+      return self::$name;
+   }
+}
+
+class ClassB
+{
+   protected static string $name = 'B';
+
+   public static function getName(): string
+   {
+      return self::$name;
+   }
+}
+
+
+echo classA::getName();
+echo classB::getName();
