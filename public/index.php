@@ -1,5 +1,10 @@
 <?php
 
+use app\AllInnOneCoffeeMaker;
+use app\LatteTrait;
+use app\LatteMaker;
+use app\CappuccinoTrait;
+use app\CappuccinoMaker;
 use app\Enums\Status;
 use app\Models\FancyGiftPackage;
 use app\Models\Flight;
@@ -51,29 +56,20 @@ $transanction = new Transaction(25);
  $or = new Order(new ShopOrder());
  echo $or->order->getOrder();
 
-/*  LATE STATIC BINDING  */
-   /*  use runtime information to determine how to call method, or acces property or cons
- */
- class ClassA
-{
-   protected static string $name = 'A';
 
-   public static function getName(): string
-   {
-      return self::$name;
-   }
-}
+$LatteMaker = new LatteMaker();
+$LatteMaker-> makeLatte(); 
 
-class ClassB
-{
-   protected static string $name = 'B';
+$cappuccinoMaker = new CappuccinoMaker();
+$cappuccinoMaker-> makeCappuccino();
 
-   public static function getName(): string
-   {
-      return self::$name;
-   }
-}
+$allinone = new AllInnOneCoffeeMaker;
+$allinone->makeCoffe(); // extending from Coffe-maker class
+$allinone->makeCappuccino(); //from traits CappuccinoTrait
+$allinone->makeLatte();
 
+//traits are just like COPY and PASTE;  it just take  code from traits and use in class which use trait
 
-echo classA::getName();
-echo classB::getName();
+/* it is able to redefine method that is defined in a trait so method 
+that is called from class that use trait has precedence
+*/
