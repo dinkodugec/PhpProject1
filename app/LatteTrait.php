@@ -7,8 +7,11 @@ trait LatteTrait
 
     public function makeLatte()
     {
-        echo static::class . 'is making Latte' . PHP_EOL;
+        echo static::class . 'is making Latte'. $this->getMilkType() . PHP_EOL;
     }
 
 
+    abstract public function getMilkType(): string;
+/*     if you mark some method abstract in trait, it should not be class, trait be abstract
+ */
 }
