@@ -67,7 +67,6 @@ $allinone = new AllInnOneCoffeeMaker;
 $allinone->makeCoffe(); // extending from Coffe-maker class
 $allinone->makeCappuccino(); //from traits CappuccinoTrait
 
-$allinone->makeLatte();
 
 //traits are just like COPY and PASTE;  it just take  code from traits and use in class which use trait
 

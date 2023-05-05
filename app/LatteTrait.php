@@ -5,13 +5,18 @@ namespace App;
 trait LatteTrait
 {
 
+    private string $milkType = 'whole-milk';
+
     public function makeLatte()
     {
-        echo static::class . 'is making Latte'. $this->getMilkType() . PHP_EOL;
+        echo static::class . 'is making Latte'. $this->milkType. PHP_EOL;
     }
 
+    public function setMilkType($milkType):static
+    {
+        $this->milkType = $milkType;
 
-    abstract public function getMilkType(): string;
-/*     if you mark some method abstract in trait, it should not be class, trait be abstract
- */
+        return $this;
+    }
+
 }
