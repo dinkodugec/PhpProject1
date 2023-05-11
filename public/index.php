@@ -73,3 +73,48 @@ $allinone->makeCappuccino(); //from traits CappuccinoTrait
 /* it is able to redefine method that is defined in a trait so method 
 that is called from class that use trait has precedence
 */
+
+/* When use a static properties in inhertance, static propertires is shared and when we change a value it is affected to orginal class
+but in traits, static properties is not shared and every class that use traits has his own version   */
+
+/* VERY SIMPLE - USE TRAITS TO CODE REPETITION */
+/* Main usecases of using anonymus classes is testing */
+/* $obj = new class(1,2,3) { //anonymus classes- can use interface, inhertiance, traits etc
+   public function __construct(public $x, public int $y, public int $z)
+   {
+      
+   }
+};
+
+var_dump($obj); */
+
+$obj = new classA (1, 2);
+
+var_dump($obj->bar(2));
+
+class classA 
+{
+   public function __construct(public $x, public int $y)
+   {
+      
+   }
+
+   public function foo()
+   {
+      return 'foo';
+   }
+
+   public function bar(): object
+   {
+      return new class {
+         public function __construct()
+         {
+
+         }
+       
+      };
+   }
+}
+
+
+
