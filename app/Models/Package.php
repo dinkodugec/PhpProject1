@@ -9,6 +9,7 @@ class Package
 
    protected float $weights = 2.5; 
     protected $deliveryType =null;
+    protected $id = "";
 
     
     public function __construct(float $weights,  string $deliveryType)
@@ -30,6 +31,13 @@ class Package
      public function doNotMakeLikeThis()
     {
         return "some lorem ipsum";
+    }
+
+    /* This method is automaically called when object is cloned, not __construct is called
+    in method down you can clean some properties etc.. */
+    public function __clone()
+    {
+        $this->id = uniqid('invoice');
     }
     
     

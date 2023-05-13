@@ -38,17 +38,13 @@ require_once '../vendor/autoload.php';
  $pack1 = new Package(3, 'ship'); 
  $pack2= new Package(3,'ship');
 
- $pack3 = $pack1;
- echo '$pack1' === '$pack3'. PHP_EOL;
-var_dump('$pack1' === '$pack3');  //return true, it references to the same point in memory; ZEND container, similiar like assign by reference in variable
+$pack3 = new Package(34, 'string');
 
-echo '$pack1' == '$pack2' . PHP_EOL;
-var_dump('$pack1' == '$pack2'); //comparision operator
-//two objects will be equal if they are objects of two same classes, with same properties and values for them
+$pack = $pack3;
+//this is not same bject cloning, they are symbols, pointers on the same point in php memory
 
-echo '$pack1' === '$pack2'. PHP_EOL;
-var_dump('$pack1' === '$pack2'); //identiy operator
-// will be the same if they point to same instance from same class
+$pack = clone $pack3;
+//object clonning, object is clone from $pack3 with same properties and methods
 
 
 

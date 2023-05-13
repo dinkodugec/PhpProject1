@@ -1,11 +1,5 @@
 {
     "require": {
         "ramsey/uuid": "^4.7"
-    },
-    "autoload": {
-        "psr-4": {
-          "core\\": "core/",
-          "app\\": "app/"
-        }
-      }
+    }
 }
