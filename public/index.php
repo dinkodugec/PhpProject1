@@ -35,89 +35,67 @@ require_once '../vendor/autoload.php';
 
 
 
+$datetime = new DateTime();
 
- $pack1 = new Package(3, 'ship'); 
- $pack2= new Package(3,'ship');
+/* var_dump($datetime); //object(DateTime)#3 (3) { ["date"]=> string(26) "2023-05-24 22:40:07.496164" ["timezone_type"]=> int(3) ["timezone"]=> string(13) "Europe/Berlin" }
 
- set_exception_handler(function(\Throwable $e) {  //register global exception handler
-    var_dump($e->getMessage());
- });
+$datetime->setTimezone(new DateTimeZone('Europe/Amsterdam')); //in PHP manual ime zones
+var_dump($datetime);
+ */
+/* 
+ echo $datetime->getTimezone()->getName() . ' - ' . $datetime->format('m//Y g:i:A');  */
 
- class Customer
- {
+ //CreteFormFormat method is good for different time formant - US, Europe
 
-        public $billingInfo = ""; 
+/* $date = '15/05/2023 3:30PM';
+$datetime = DateTime::createFromFormat('d/m/Y g:iA', $date); FORMATING DATE and time - some data came from pi, or inputs or similiar  */
 
-    public function __construct($billingInfo= [])
-    {
-        
-    }
+$datetime1 = new DateTime('05/05/2023 9:15 AM');
+$datetime2 = new DateTime('05/06/2023 3:15 AM');
 
-    public function getBillingInfo()
-    {
-         return $this->billingInfo;
-    }
+/* var_dump($datetime1);
+die(); */
 
+/* 
+var_dump($datetime1 < $datetime2);
+var_dump($datetime1 > $datetime2);
+var_dump($datetime1 == $datetime2);
+ */
 
+/* DIFFERENCES BETWEEN DAYS */
 
- }
+/* var_dump($datetime1->diff($datetime2)); */
+//diff() 
+//it also creates invert in properties of object, it means negtive difference
 
+/* echo $datetime2->diff($datetime1)->days;
+echo $datetime2->diff($datetime1)->format('%d days, %Y years');
+echo $datetime2->diff($datetime1)->format('%a');  //days total difference
 
- class Invoice 
- {
-    public function __construct(public Customer $customer)
-    {
-        
-    }
+$interval = new DateInterval(''); //see in documentation */
 
-    public function process($amount): void
-    {
+/* Calculation  */
 
-        if($amount < 0){
-            /*  throw  MissingBillingInfoException::missingInfo(); calling static metod */
-           //classic built_in exception class
-      /*        throw new \Exception('Invalid invoice amount'); this is base exception in PHP */
-        /*      throw new \InvalidArgumentException('Invalid invoice amount');  */
-            // it is in built-in php library of exception, there are severeal exception in library
-        }
-
-        if(empty($this->customer->getBillingInfo())){
-             throw new MissingBillingInfoException(); //custom made exception made in Exception folder
-         }  
-        echo 'Processing $' . $amount . 'invoice -';
-
-        sleep(2);
-
-        echo 'ok';
-    }
+$datetime = new DateTime('05/05/2023 9:15 AM');
+$interval = new DateInterval('P1M');
 
 
- }
+$datetime->add($interval);
+echo $datetime->format('m/d/Y g:iA');
 
- $invoice = new Invoice(new Customer());
- try{
-    $invoice->process(-34);
- } catch(\App\Exception\MissingBillingInfoException $e){
-   /*  catch(\App\Exception\MissingBillingInfoException|\InvalidArgumentException $e ) multiple exception*/
-   /*   echo $e->getMessage() . ' ' . $e->getFile();  *///after php 8 it is needed
-   // after php 8 it can be like down there
-   return "some string...";
- } catch(InvalidArgumentException){
-    return 'some..'; //it can be muliple catch block
- }
+$datetime->sub($interval);
+echo $datetime->format('m/d/Y g:iA');
 
- try {
-    $invoice->process(-34);
- } catch(Exception $e){
-    echo $e->getMessage('string...');
- } finally {
-    echo 'finally block'; //this finally block, it will be throw no matter a exceptiom is throw or not
- }
+$from = new DateTime();
+$to = ($from)->add(new DateInterval('P1M'));
+echo $from->format('m/d/Y') . ' ' . $to->format('m/d/Y');
 
 
+$from = new DateTimeImmutable();
+$to = $from->add(new DateInterval('P1M'));
+echo $from->format('m/d/Y') . ' ' . $to->format('m/d/Y');
 
-/*  Exception is a object of Exception class that describes an error 
-Both Exception and Error class implements a throwable interface*/
-
-
-
+$period = new DatePeriod(new DateTime('05/01/2022'),new DateInterval('P1D'), new DateTime('05/31/2022'));
+foreach($period as $date){
+    echo $date->format('m/d/Y');
+}
