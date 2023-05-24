@@ -16,6 +16,7 @@ use app\Models\OrderInterface;
 use app\Models\WebOrder;
 use app\Models\Order;
 use app\Models\ShopOrder;
+use app\Exception\MissingBillingInfoException;
 
 
 /* spl_autoload_register(function($class){
@@ -38,94 +39,85 @@ require_once '../vendor/autoload.php';
  $pack1 = new Package(3, 'ship'); 
  $pack2= new Package(3,'ship');
 
+ set_exception_handler(function(\Throwable $e) {  //register global exception handler
+    var_dump($e->getMessage());
+ });
 
+ class Customer
+ {
 
-/* Serialization is process of converting a value in string form 
-  you can serialize and objects - it serialze properties and values, like class name but not serialize methods
-Resource types and closures can not be serialize
-Never pass unsecure data in unserialize function
-*/
+        public $billingInfo = ""; 
 
-/* echo serialize(true);
-echo serialize(1);
-echo serialize(2.5);
-echo serialize('hello world');
-echo serialize([1,2,3]);
-echo serialize(['a'=>1, 'b'=>2]);  */
-
-/* var_dump(unserialize(serialize(['a'=>1, 'b'=>2]))); */
-
-/* echo serialize($pack1); */
-
-/* var_dump (unserialize()); */
-
-class Invoice 
-{
-     public string $id;
-
-     public function __construct(
-        public float $amount,
-        public string $description,
-        public string $creditCardNumber
-     )
-     {
-        $this->id= uniqid('invoice');
-     }
-
- /*      //called before object is serialize- you can hook some event preserialzation to clean 
-      // some property example
-     public function __sleep()
-     {
-        return ['id', 'amount']; //it would only serialize id and amount
-     }
-
-     public function __wakeup() //called afterobject is unserialize
-     {
+    public function __construct($billingInfo= [])
+    {
         
-     } THEY ARE REDUNDED */
+    }
 
-     /* serialize and __unserialze magic methods are some improvments of __sleep 
-     and __wake.... act like interface  */
-
-     public function __serialize(): array
-     {
-        /* you have full control how object is serialize 
-        must return array that represent object, it is not limited to propertires
-        it can return aray with key=>value pair that describe object besides properties */
-        return [
-            'id' => $this->id,
-            'amount' => $this->amount,
-            'description'=>$this->description,
-            'creditCardNumber'=>base64_encode($this->creditCardNumber) ,
-            'foo'=> 'bar',
-        ];
-     }
-
-     //when you have both sleep() and serialze() method, serialize method will be called and sleep will be ingored
-
-
-     //called after object is unserialize
-     public function __unserialize(array $data): void //$data which is serialized is argument
-     {
-         $this->id = $data['id'];
-        $this->amount = $data['amount'];
-        $this->description = $data['description'];
-        $this->creditCardNumber = base64_encode($data['creditCardNumber']);
-       
-     }
- 
+    public function getBillingInfo()
+    {
+         return $this->billingInfo;
+    }
 
 
 
-
-}
-
-$invoice = new Invoice(25, 'invoice 1', '12334455666');
-
-$str = serialize($invoice);  //only serialize id and amount
+ }
 
 
-$invoice2 = unserialize($str); //now get data back from serialize, and we can restore a object or something else
-/* echo $str; */
+ class Invoice 
+ {
+    public function __construct(public Customer $customer)
+    {
+        
+    }
 
-var_dump($invoice2); //we get properly structured an object
+    public function process($amount): void
+    {
+
+        if($amount < 0){
+            /*  throw  MissingBillingInfoException::missingInfo(); calling static metod */
+           //classic built_in exception class
+      /*        throw new \Exception('Invalid invoice amount'); this is base exception in PHP */
+        /*      throw new \InvalidArgumentException('Invalid invoice amount');  */
+            // it is in built-in php library of exception, there are severeal exception in library
+        }
+
+        if(empty($this->customer->getBillingInfo())){
+             throw new MissingBillingInfoException(); //custom made exception made in Exception folder
+         }  
+        echo 'Processing $' . $amount . 'invoice -';
+
+        sleep(2);
+
+        echo 'ok';
+    }
+
+
+ }
+
+ $invoice = new Invoice(new Customer());
+ try{
+    $invoice->process(-34);
+ } catch(\App\Exception\MissingBillingInfoException $e){
+   /*  catch(\App\Exception\MissingBillingInfoException|\InvalidArgumentException $e ) multiple exception*/
+   /*   echo $e->getMessage() . ' ' . $e->getFile();  *///after php 8 it is needed
+   // after php 8 it can be like down there
+   return "some string...";
+ } catch(InvalidArgumentException){
+    return 'some..'; //it can be muliple catch block
+ }
+
+ try {
+    $invoice->process(-34);
+ } catch(Exception $e){
+    echo $e->getMessage('string...');
+ } finally {
+    echo 'finally block'; //this finally block, it will be throw no matter a exceptiom is throw or not
+ }
+
+
+
+/*  Exception is a object of Exception class that describes an error 
+Both Exception and Error class implements a throwable interface*/
+
+
+
