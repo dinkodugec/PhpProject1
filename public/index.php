@@ -19,6 +19,7 @@ use app\Models\ShopOrder;
 use app\Exception\MissingBillingInfoException;
 
 
+
 /* spl_autoload_register(function($class){
 
    $path =__DIR__ . '/../' . lcfirst(str_replace('\\', '/', $class)) . '.php';
@@ -35,67 +36,90 @@ require_once '../vendor/autoload.php';
 
 
 
-$datetime = new DateTime();
+class Invoice {
+    public string $id;
 
-/* var_dump($datetime); //object(DateTime)#3 (3) { ["date"]=> string(26) "2023-05-24 22:40:07.496164" ["timezone_type"]=> int(3) ["timezone"]=> string(13) "Europe/Berlin" }
+    public function __construct(public float $amount)
+    {
+        $this->id = random_int(1000, 99999);
+    }
+}
 
-$datetime->setTimezone(new DateTimeZone('Europe/Amsterdam')); //in PHP manual ime zones
-var_dump($datetime);
- */
-/* 
- echo $datetime->getTimezone()->getName() . ' - ' . $datetime->format('m//Y g:i:A');  */
+/*foreach(new Invoice(24) as $key => $value){
+   echo $key . ' = ' .  $value;
+} */
 
- //CreteFormFormat method is good for different time formant - US, Europe
+/* class InvoiceCollection implements \Iterator
+{
+    public function __construct(public array $invoices)
+    {
+       
+    }
 
-/* $date = '15/05/2023 3:30PM';
-$datetime = DateTime::createFromFormat('d/m/Y g:iA', $date); FORMATING DATE and time - some data came from pi, or inputs or similiar  */
+    public function current(): mixed
+    {
+        echo __METHOD__;
+        return current($this->invoices); //return curent element from invoices list
+    }
 
-$datetime1 = new DateTime('05/05/2023 9:15 AM');
-$datetime2 = new DateTime('05/06/2023 3:15 AM');
+    public function next()
+    {
+      //pointer to next element
+      echo __METHOD__ . PHP_EOL;
 
-/* var_dump($datetime1);
-die(); */
+      next($this->invoices);
+        
+    }
 
-/* 
-var_dump($datetime1 < $datetime2);
-var_dump($datetime1 > $datetime2);
-var_dump($datetime1 == $datetime2);
- */
+    public function key(): mixed
+    {
+        echo __METHOD__ . PHP_EOL;
 
-/* DIFFERENCES BETWEEN DAYS */
+        return key($this->invoices); //return a key of currwnt element in array
+        
+    }
 
-/* var_dump($datetime1->diff($datetime2)); */
-//diff() 
-//it also creates invert in properties of object, it means negtive difference
+    public function valid(): bool
+    {
+        echo __METHOD__ . PHP_EOL;
+        //if current position valid
 
-/* echo $datetime2->diff($datetime1)->days;
-echo $datetime2->diff($datetime1)->format('%d days, %Y years');
-echo $datetime2->diff($datetime1)->format('%a');  //days total difference
+        return current($this->invoices) !== false;
+        
+    }
 
-$interval = new DateInterval(''); //see in documentation */
+    public function rewind(): void
+    {
+        //it is called at beginig of a loop, reset a pointer to beginning
 
-/* Calculation  */
-
-$datetime = new DateTime('05/05/2023 9:15 AM');
-$interval = new DateInterval('P1M');
-
-
-$datetime->add($interval);
-echo $datetime->format('m/d/Y g:iA');
-
-$datetime->sub($interval);
-echo $datetime->format('m/d/Y g:iA');
-
-$from = new DateTime();
-$to = ($from)->add(new DateInterval('P1M'));
-echo $from->format('m/d/Y') . ' ' . $to->format('m/d/Y');
+        echo __METHOD__ . PHP_EOL;
+        reset($this->invoices);
+        
+    }
 
 
-$from = new DateTimeImmutable();
-$to = $from->add(new DateInterval('P1M'));
-echo $from->format('m/d/Y') . ' ' . $to->format('m/d/Y');
+} */
 
-$period = new DatePeriod(new DateTime('05/01/2022'),new DateInterval('P1D'), new DateTime('05/31/2022'));
-foreach($period as $date){
-    echo $date->format('m/d/Y');
+class InvoiceCollection implements \IteratorAggregate // it simplier and better for simple usecase a loop through objects
+{
+    public function __construct(public array $invoices)
+    {
+       
+    }
+
+   public function getIterator(): Traversable
+   {
+    return new \ArrayIterator($this->invoices);
+    
+   }
+
+}
+
+/* WE CAN REPLACE A BUILT-IN ITERATOR WITH DOWN THERE ......*/
+
+$invoiceCollection = new InvoiceCollection([new Invoice(12), new Invoice(43)]);
+
+foreach($invoiceCollection as $invoices){
+   /*  var_dump($invoice); */
+    echo $invoices->id . ' - ' . $invoices->amount .  PHP_EOL;
 }
